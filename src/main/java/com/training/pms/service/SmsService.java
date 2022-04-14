@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 
 import com.training.pms.dto.SmsPojo;
+import com.training.pms.dto.StoreOTP;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
@@ -57,6 +58,7 @@ public class SmsService {
         Message message = Message.creator(new PhoneNumber(sms.getPhoneNo()), new PhoneNumber(FROM_NUMBER), msg)
                 .create();
        
+        StoreOTP.setOtp(number);
      
     }
 
