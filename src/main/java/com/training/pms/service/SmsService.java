@@ -1,8 +1,10 @@
 package com.training.pms.service;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Properties;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
@@ -13,11 +15,32 @@ import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 @Component
 public class SmsService {
-     private final String ACCOUNT_SID ="AC9d02442b9258cf891d84dea0a048892b";
+	public SmsService() {
+		Properties properties = new Properties();
+		
+		try {
+			// config.properties is a seperate file in my .gitignore holding the following 3 values
+			FileReader f = new FileReader("config.properties");
+			
+				properties.load(f);
+				ACCOUNT_SID = properties.getProperty("SECURE_ACCOUNT_SID");
+				AUTH_TOKEN = properties.getProperty("SECURE_AUTH_TOKEN");
+				FROM_NUMBER = properties.getProperty("SECURE_FROM_NUMBER");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+    private String ACCOUNT_SID;
 
-    private final String AUTH_TOKEN = "448cc602f8547730f06e54517a3682b5";
+    private String AUTH_TOKEN;
 
-    private final String FROM_NUMBER = "+18106710624";
+    private String FROM_NUMBER;
 
     public void send(SmsPojo sms) throws ParseException {
     	Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
